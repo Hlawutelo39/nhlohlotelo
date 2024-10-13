@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Background</title>
+    <style>
+        body {
+            background-image: url('https://beautyboostmedspa.com/storage/2022/11/INTRODUCING-BOOTY-BOOSTS.jpeg'); /* Replace with your book background URL */
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            padding: 50px;
+        }
+        input, select {
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            width: 300px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Student Information</h1>
+    <form id="studentForm">
+        <input type="number" placeholder="Age" required>
+        <input type="text" placeholder="Student No" required>
+        <input type="text" placeholder="Course" required>
+        
+        <label for="gender">Gender:</label>
+        <select id="gender" required>
+            <option value="" disabled selected>Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        // Function to get URL parameters
+        function getUrlParams() {
+            const params = {};
+            const queryString = window.location.search.substring(1);
+            const pairs = queryString.split("&");
+            pairs.forEach(pair => {
+                const [key, value] = pair.split("=");
+                params[decodeURIComponent(key)] = decodeURIComponent(value);
+            });
+            return params;
+        }
+
+        const urlParams = getUrlParams();
+
+        // Add parameters to the form before submission
+        document.getElementById('studentForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            
+            const age = event.target[0].value;
+            const studentNo = event.target[1].value;
+            const course = event.target[2].value;
+            const gender = event.target[3].value;
+
+            const data = `Name: ${urlParams.name}\nSurname: ${urlParams.surname}\nUniversity: ${urlParams.university}\nAddress: ${urlParams.address}\nAge: ${age}\nStudent No: ${studentNo}\nCourse: ${course}\nGender: ${gender}`;
+
+            // Create a blob and a link to download the file
+            const blob = new Blob([data], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'student_info.txt'; // Filename
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+    </script>
+
+</body>
+</html>
